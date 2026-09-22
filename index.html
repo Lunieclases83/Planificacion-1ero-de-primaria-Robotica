@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Robótica 1.º Primaria · Seguimiento 2026–2027</title>
+<style>
+:root{--navy:#10233f;--gold:#d4a72c;--bg:#f5f7fb;--card:#fff;--text:#18243a;--muted:#667085;--green:#16794b;--amber:#a15c00;--gray:#667085;--line:#e4e7ec}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
+header{background:linear-gradient(135deg,#10233f,#1e3a63);color:white;padding:28px 20px}.wrap{max-width:1180px;margin:auto}
+.brandhead{display:flex;align-items:center;gap:20px}.school-logo{width:112px;height:112px;object-fit:contain;background:white;border-radius:50%;padding:5px;box-shadow:0 6px 18px #0002}@media(max-width:620px){.brandhead{align-items:flex-start}.school-logo{width:78px;height:78px}}
+.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#f1d785;font-weight:800}.title{font-size:clamp(25px,4vw,42px);margin:6px 0}.sub{opacity:.88}
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:-18px}.kpi{background:white;border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 8px 24px #10233f12}.kpi b{display:block;font-size:26px}.kpi span{font-size:12px;color:var(--muted)}
+main{padding:28px 20px 50px}.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:18px 0}.btn{border:1px solid var(--line);background:#fff;padding:9px 13px;border-radius:999px;cursor:pointer;font-weight:700}.btn.active{background:var(--navy);color:#fff}
+.progress{height:10px;background:#e9edf4;border-radius:999px;overflow:hidden}.bar{height:100%;background:var(--gold)}
+.now{background:#fff8e8;border:1px solid #ecd28a;border-radius:16px;padding:16px;margin:18px 0}.now strong{color:#7a4c00}
+.chapter{margin-top:30px}.chapter h2{font-size:20px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:17px;cursor:pointer;transition:.15s}.card:hover{transform:translateY(-1px);box-shadow:0 10px 24px #10233f12}
+.top{display:flex;justify-content:space-between;gap:10px}.num{font-size:12px;font-weight:800;color:var(--muted)}.badge{font-size:11px;font-weight:800;border-radius:999px;padding:5px 9px}
+.impartida{background:#e8f7ef;color:var(--green)}.actual{background:#fff2d6;color:var(--amber)}.pendiente{background:#eef1f5;color:var(--gray)}
+.card h3{margin:8px 0 5px;font-size:17px}.meta{font-size:12px;color:var(--muted)}
+dialog{width:min(860px,94vw);border:0;border-radius:20px;padding:0;box-shadow:0 30px 80px #0004}dialog::backdrop{background:#08142699}
+.modal-head{background:var(--navy);color:white;padding:20px}.modal-body{padding:20px}.section{border-top:1px solid var(--line);padding:15px 0}.section:first-child{border-top:0}.section h4{margin:0 0 7px;color:var(--navy)}.three{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.mini{background:#f7f8fb;border-radius:12px;padding:12px}
+.exec{background:#f8fafc;border:1px dashed #b9c2cf;border-radius:14px;padding:14px}.close{float:right;border:0;background:#ffffff22;color:white;border-radius:10px;padding:7px 10px;cursor:pointer}
+.note{font-size:12px;color:var(--muted);margin-top:12px}.footer{margin-top:34px;color:var(--muted);font-size:12px;text-align:center}
+@media(max-width:760px){.kpis{grid-template-columns:repeat(2,1fr)}.grid,.three{grid-template-columns:1fr}}
+@media print{.toolbar,.close{display:none}.card{break-inside:avoid}header{background:white;color:black}.kpis{margin-top:10px}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+<div class="brandhead">
+<img class="school-logo" src="logo-cajpd.png" alt="Logo del Colegio Adventista Juan Pablo Duarte">
+<div>
+<div class="eyebrow">Colegio Adventista Juan Pablo Duarte · Tecnología e Innovación</div>
+<div class="title">Robótica · 1.º de Primaria</div>
+<div class="sub">SmartTEAM Libro 1 · Año escolar 2026–2027 · 1 encuentro semanal de 90 minutos</div>
+</div>
+</div>
+</div></header>
+<main class="wrap">
+<div class="kpis">
+<div class="kpi"><b id="total">35</b><span>Clases planificadas</span></div>
+<div class="kpi"><b id="done">3</b><span>Impartidas</span></div>
+<div class="kpi"><b id="current">1</b><span>Clase actual</span></div>
+<div class="kpi"><b id="pending">31</b><span>Pendientes</span></div>
+<div class="kpi"><b id="pct">9%</b><span>Avance impartido</span></div>
+</div>
+<div style="margin-top:18px" class="progress"><div class="bar" id="bar"></div></div>
+<div class="now" id="now"></div>
+<div class="toolbar">
+<button class="btn active" data-filter="all">Todas</button><button class="btn" data-filter="impartida">Impartidas</button><button class="btn" data-filter="actual">Actual</button><button class="btn" data-filter="pendiente">Pendientes</button>
+<button class="btn" onclick="window.print()">Imprimir / PDF</button>
+</div>
+<div id="content"></div>
+<div class="footer">Planificación adaptada para encuentros de 90 minutos · Filosofía cristiana adventista integrada · Fuente académica base: SmartTEAM Libro 1.<br><strong>Cortesía de SolunieCloud Studio</strong></div>
+</main>
+<dialog id="dlg"><div class="modal-head"><button class="close" onclick="dlg.close()">Cerrar</button><div id="mh"></div></div><div class="modal-body" id="mb"></div></dialog>
+<script src="data.js"></script>
+<script>
+const labels={impartida:"✓ Impartida",actual:"● Clase actual",pendiente:"○ Pendiente"};
+let filter="all";
+function esc(s){return (s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+function stats(){
+ const d=CLASSES.filter(x=>x.status==="impartida").length, a=CLASSES.filter(x=>x.status==="actual").length,p=CLASSES.filter(x=>x.status==="pendiente").length;
+ total.textContent=CLASSES.length;done.textContent=d;current.textContent=a;pending.textContent=p;pct.textContent=Math.round(d/CLASSES.length*100)+"%";bar.style.width=(d/CLASSES.length*100)+"%";
+ const c=CLASSES.find(x=>x.status==="actual"); now.innerHTML=c?`<strong>¿Dónde estamos?</strong> Clase ${c.id} · ${esc(c.chapterName)} · ${esc(c.topic)}. <span class="meta">Las clases anteriores figuran como impartidas y las siguientes como pendientes.</span>`:"No hay una clase marcada como actual.";
+}
+function render(){
+ let html="";
+ for(let ch=1;ch<=5;ch++){
+   const all=CLASSES.filter(x=>x.chapter===ch), arr=all.filter(x=>filter==="all"||x.status===filter); if(!arr.length) continue;
+   html+=`<section class="chapter"><h2>Capítulo ${ch} · ${esc(all[0].chapterName)}</h2><div class="grid">`;
+   for(const x of arr) html+=`<article class="card" onclick="openClass(${x.id})"><div class="top"><span class="num">CLASE ${x.id} · SEMANA ${x.week}</span><span class="badge ${x.status}">${labels[x.status]}</span></div><h3>${esc(x.topic)}</h3><div class="meta">90 min · Filosofía + planificación + ejecución</div></article>`;
+   html+="</div></section>";
+ }
+ content.innerHTML=html;
+}
+function openClass(id){
+ const x=CLASSES.find(v=>v.id===id);
+ mh.innerHTML=`<div class="eyebrow">Clase ${x.id} · Capítulo ${x.chapter}</div><h2 style="margin:5px 0">${esc(x.topic)}</h2><span class="badge ${x.status}">${labels[x.status]}</span>`;
+ mb.innerHTML=`
+ <div class="section"><h4>Filosofía cristiana adventista</h4><p>${esc(x.philosophy)}</p><p><strong>${esc(x.verse)}</strong></p></div>
+ <div class="section"><h4>Propósito y contenido SmartTEAM</h4><p>${esc(x.objective)}</p></div>
+ <div class="section"><h4>Secuencia didáctica · 90 minutos</h4><div class="three"><div class="mini"><b>Inicio</b><p>${esc(x.sequence.inicio)}</p></div><div class="mini"><b>Desarrollo</b><p>${esc(x.sequence.desarrollo)}</p></div><div class="mini"><b>Cierre</b><p>${esc(x.sequence.cierre)}</p></div></div></div>
+ <div class="section"><h4>Recursos y organización</h4><p><b>Recursos:</b> ${esc(x.resources)}</p><p><b>Organización:</b> ${esc(x.grouping)}</p></div>
+ <div class="section"><h4>Evidencia e instrumento</h4><p><b>Evidencia:</b> ${esc(x.evidence)}</p><p><b>Instrumento:</b> ${esc(x.instrument)}</p></div>
+ <div class="section"><h4>Registro de ejecución</h4><div class="exec"><p><b>Fecha impartida:</b> ${esc(x.execution.date)||"Por registrar"}</p><p><b>Contenido realmente alcanzado:</b> ${esc(x.execution.completed)||"Por registrar"}</p><p><b>Pendiente para próximo encuentro:</b> ${esc(x.execution.pending)||"Por registrar"}</p><p><b>Observaciones:</b> ${esc(x.execution.notes)||"Por registrar"}</p></div><div class="note">Este bloque se actualiza en <code>data.js</code> y, al publicar el cambio en GitHub, usted y Coordinación verán exactamente la misma versión.</div></div>`;
+ dlg.showModal();
+}
+document.querySelectorAll(".btn[data-filter]").forEach(b=>b.onclick=()=>{document.querySelectorAll(".btn[data-filter]").forEach(x=>x.classList.remove("active"));b.classList.add("active");filter=b.dataset.filter;render()});
+stats();render();
+</script>
+</body></html>
