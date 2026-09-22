@@ -24,6 +24,8 @@ dialog{width:min(860px,94vw);border:0;border-radius:20px;padding:0;box-shadow:0 
 .note{font-size:12px;color:var(--muted);margin-top:12px}.footer{margin-top:34px;color:var(--muted);font-size:12px;text-align:center}
 @media(max-width:760px){.kpis{grid-template-columns:repeat(2,1fr)}.grid,.three{grid-template-columns:1fr}}
 @media print{.toolbar,.close{display:none}.card{break-inside:avoid}header{background:white;color:black}.kpis{margin-top:10px}}
+.rubric-table{width:100%;border-collapse:collapse;font-size:12px}.rubric-table th,.rubric-table td{border:1px solid var(--line);padding:9px;vertical-align:top}.rubric-table th{background:#eef3f8}.rubric-actions{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+@media print{dialog[open]{position:static;width:100%;box-shadow:none}.modal-head{background:white;color:black}.rubric-table{font-size:10px}}
 </style>
 </head>
 <body>
@@ -47,6 +49,8 @@ dialog{width:min(860px,94vw);border:0;border-radius:20px;padding:0;box-shadow:0 
 </div>
 <div style="margin-top:18px" class="progress"><div class="bar" id="bar"></div></div>
 <div class="now" id="now"></div>
+<section class="chapter" id="instrumentos"><h2>Instrumentos de evaluación</h2>
+<div class="grid" id="rubricCards"></div></section>
 <div class="toolbar">
 <button class="btn active" data-filter="all">Todas</button><button class="btn" data-filter="impartida">Impartidas</button><button class="btn" data-filter="actual">Actual</button><button class="btn" data-filter="pendiente">Pendientes</button>
 <button class="btn" onclick="window.print()">Imprimir / PDF</button>
@@ -56,6 +60,7 @@ dialog{width:min(860px,94vw);border:0;border-radius:20px;padding:0;box-shadow:0 
 </main>
 <dialog id="dlg"><div class="modal-head"><button class="close" onclick="dlg.close()">Cerrar</button><div id="mh"></div></div><div class="modal-body" id="mb"></div></dialog>
 <script src="data.js"></script>
+<script src="rubrics.js"></script>
 <script>
 const labels={impartida:"✓ Impartida",actual:"● Clase actual",pendiente:"○ Pendiente"};
 let filter="all";
@@ -89,5 +94,27 @@ function openClass(id){
 }
 document.querySelectorAll(".btn[data-filter]").forEach(b=>b.onclick=()=>{document.querySelectorAll(".btn[data-filter]").forEach(x=>x.classList.remove("active"));b.classList.add("active");filter=b.dataset.filter;render()});
 stats();render();
+
+function rubricCardsRender(){
+ let h="";
+ for(let i=1;i<=5;i++){let r=RUBRICS[i];h+=`<article class="card" onclick="openRubric(${i})"><div class="top"><span class="num">RÚBRICA OFICIAL · CAPÍTULO ${i}</span></div><h3>${esc(r.title)}</h3><div class="meta">Robótica · Programación · Pensamiento computacional · Ver / imprimir</div></article>`}
+ h+=`<article class="card" onclick="openSoft()"><div class="top"><span class="num">RÚBRICA TRANSVERSAL</span></div><h3>Habilidades blandas y actitudes</h3><div class="meta">Desempeño personal y grupal · Ver / imprimir</div></article>`;
+ rubricCards.innerHTML=h;
+}
+function openRubric(ch){
+ const r=RUBRICS[ch]; mh.innerHTML=`<div class="eyebrow">Instrumento oficial · Libro 1 · Capítulo ${ch}</div><h2 style="margin:5px 0">${esc(r.title)}</h2>`;
+ let rows=r.rows.map(x=>`<tr>${x.map(v=>`<td>${esc(v)}</td>`).join("")}</tr>`).join("");
+ mb.innerHTML=`<div class="rubric-actions"><button class="btn" onclick="window.print()">Imprimir rúbrica</button></div><table class="rubric-table"><thead><tr><th>Área</th><th>Criterio</th><th>Aún no adquirido</th><th>Parcialmente adquirido</th><th>Totalmente adquirido</th></tr></thead><tbody>${rows}</tbody></table><p class="note">Rúbrica orientadora del proceso de enseñanza-aprendizaje. Se conserva la escala propuesta por SmartTEAM.</p>`;
+ dlg.showModal();
+}
+function openSoft(){
+ mh.innerHTML=`<div class="eyebrow">Instrumento transversal</div><h2 style="margin:5px 0">Habilidades blandas y actitudes</h2>`;
+ let p=SOFT_RUBRIC.personal.map(v=>`<tr><td>Desempeño personal</td><td>${esc(v)}</td><td></td><td></td><td></td></tr>`).join("");
+ let g=SOFT_RUBRIC.group.map(v=>`<tr><td>Desempeño grupal</td><td>${esc(v)}</td><td></td><td></td><td></td></tr>`).join("");
+ mb.innerHTML=`<div class="rubric-actions"><button class="btn" onclick="window.print()">Imprimir rúbrica</button></div><table class="rubric-table"><thead><tr><th>Área</th><th>Criterio</th><th>Muy pocas veces</th><th>Algunas veces</th><th>La mayoría de las veces</th></tr></thead><tbody>${p}${g}</tbody></table>`;
+ dlg.showModal();
+}
+rubricCardsRender();
+
 </script>
 </body></html>
