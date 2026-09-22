@@ -49,8 +49,11 @@ dialog{width:min(860px,94vw);border:0;border-radius:20px;padding:0;box-shadow:0 
 </div>
 <div style="margin-top:18px" class="progress"><div class="bar" id="bar"></div></div>
 <div class="now" id="now"></div>
-<section class="chapter" id="instrumentos"><h2>Instrumentos de evaluación</h2>
-<div class="grid" id="rubricCards"></div></section>
+<section class="chapter" id="instrumentos">
+  <h2>Instrumentos de evaluación</h2>
+  <p class="meta">Rúbricas oficiales de SmartTEAM por capítulo y rúbrica transversal de habilidades blandas y actitudes.</p>
+  <div class="grid" id="rubricCards"></div>
+</section>
 <div class="toolbar">
 <button class="btn active" data-filter="all">Todas</button><button class="btn" data-filter="impartida">Impartidas</button><button class="btn" data-filter="actual">Actual</button><button class="btn" data-filter="pendiente">Pendientes</button>
 <button class="btn" onclick="window.print()">Imprimir / PDF</button>
@@ -88,7 +91,7 @@ function openClass(id){
  <div class="section"><h4>Propósito y contenido SmartTEAM</h4><p>${esc(x.objective)}</p></div>
  <div class="section"><h4>Secuencia didáctica · 90 minutos</h4><div class="three"><div class="mini"><b>Inicio</b><p>${esc(x.sequence.inicio)}</p></div><div class="mini"><b>Desarrollo</b><p>${esc(x.sequence.desarrollo)}</p></div><div class="mini"><b>Cierre</b><p>${esc(x.sequence.cierre)}</p></div></div></div>
  <div class="section"><h4>Recursos y organización</h4><p><b>Recursos:</b> ${esc(x.resources)}</p><p><b>Organización:</b> ${esc(x.grouping)}</p></div>
- <div class="section"><h4>Evidencia e instrumento</h4><p><b>Evidencia:</b> ${esc(x.evidence)}</p><p><b>Instrumento:</b> ${esc(x.instrument)}</p></div>
+ <div class="section"><h4>Evidencia e instrumento</h4><p><b>Evidencia:</b> ${esc(x.evidence)}</p><p><b>Instrumento asociado:</b> Rúbrica oficial SmartTEAM del Capítulo ${x.chapter}.</p><button class="btn" onclick="openRubric(${x.chapter})">Ver rúbrica del capítulo</button><button class="btn" onclick="openSoft()">Habilidades blandas y actitudes</button></div>
  <div class="section"><h4>Registro de ejecución</h4><div class="exec"><p><b>Fecha impartida:</b> ${esc(x.execution.date)||"Por registrar"}</p><p><b>Contenido realmente alcanzado:</b> ${esc(x.execution.completed)||"Por registrar"}</p><p><b>Pendiente para próximo encuentro:</b> ${esc(x.execution.pending)||"Por registrar"}</p><p><b>Observaciones:</b> ${esc(x.execution.notes)||"Por registrar"}</p></div><div class="note">Este bloque se actualiza en <code>data.js</code> y, al publicar el cambio en GitHub, usted y Coordinación verán exactamente la misma versión.</div></div>`;
  dlg.showModal();
 }
