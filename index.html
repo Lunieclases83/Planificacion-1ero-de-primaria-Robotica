@@ -72,7 +72,7 @@ function ev(x,f){return localStorage.getItem(k(x.id,f))||((x.execution&&x.execut
 let filter="all";
 function esc(s){return (s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
 function stats(){
- const d=CLASSES.filter(x=>state(x)==="impartida").length, a=CLASSES.filter(x=>state(x)==="actual").length,p=CLASSES.filter(x=>state(x)==="pendiente").length;
+ const d=CLASSES.filter(x=>["impartida","evaluada","cerrada"].includes(state(x))).length, a=CLASSES.filter(x=>state(x)==="actual").length,p=CLASSES.filter(x=>state(x)==="pendiente").length;
  total.textContent=CLASSES.length;done.textContent=d;current.textContent=a;pending.textContent=p;pct.textContent=Math.round(d/CLASSES.length*100)+"%";bar.style.width=(d/CLASSES.length*100)+"%";
  const c=CLASSES.find(x=>state(x)==="actual"); now.innerHTML=c?`<strong>¿Dónde estamos?</strong> Clase ${c.id} · ${esc(c.chapterName)} · ${esc(c.topic)}. <span class="meta">Las clases anteriores figuran como impartidas y las siguientes como pendientes.</span>`:"No hay una clase marcada como actual.";
 }
@@ -105,6 +105,23 @@ function openClass(id){
 <label>Observaciones<textarea id="exNotes">${esc(ev(x,"notes"))}</textarea></label>
 <p class="note">Los cambios se guardan automáticamente en este navegador. No necesita modificar <code>data.js</code> para su seguimiento personal.</p>
 </div></div>`;
+ const s=document.getElementById("exStatus");
+ if(s){
+   s.value=state(x);
+   s.addEventListener("change",()=>{
+     localStorage.setItem(k(x.id,"status"),s.value);
+     const badge=mh.querySelector(".badge");
+     if(badge){badge.className="badge "+s.value;badge.textContent=labels[s.value]||s.value;}
+     stats();render();
+   });
+   [["exDate","date"],["exCompleted","completed"],["exPending","pending"],["exNotes","notes"]].forEach(([eid,field])=>{
+     const el=document.getElementById(eid);
+     if(el){
+       const save=()=>localStorage.setItem(k(x.id,field),el.value);
+       el.addEventListener("input",save);el.addEventListener("change",save);
+     }
+   });
+ }
  dlg.showModal();
 }
 document.querySelectorAll(".btn[data-filter]").forEach(b=>b.onclick=()=>{document.querySelectorAll(".btn[data-filter]").forEach(x=>x.classList.remove("active"));b.classList.add("active");filter=b.dataset.filter;render()});
