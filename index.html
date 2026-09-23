@@ -20,7 +20,10 @@ main{padding:28px 20px 50px}.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-
 .card h3{margin:8px 0 5px;font-size:17px}.meta{font-size:12px;color:var(--muted)}
 dialog{width:min(860px,94vw);border:0;border-radius:20px;padding:0;box-shadow:0 30px 80px #0004}dialog::backdrop{background:#08142699}
 .modal-head{background:var(--navy);color:white;padding:20px}.modal-body{padding:20px}.section{border-top:1px solid var(--line);padding:15px 0}.section:first-child{border-top:0}.section h4{margin:0 0 7px;color:var(--navy)}.three{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.mini{background:#f7f8fb;border-radius:12px;padding:12px}
-.exec{background:#f8fafc;border:1px dashed #b9c2cf;border-radius:14px;padding:14px}.close{float:right;border:0;background:#ffffff22;color:white;border-radius:10px;padding:7px 10px;cursor:pointer}
+.exec{background:#f8fafc;border:1px dashed #b9c2cf;border-radius:14px;padding:14px}
+.exec-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.exec label{font-size:12px;font-weight:800;color:var(--navy)}
+.exec select,.exec input,.exec textarea{width:100%;margin-top:5px;padding:9px;border:1px solid var(--line);border-radius:9px;background:#fff;font:inherit}.exec textarea{min-height:72px;resize:vertical}
+@media(max-width:620px){.exec-grid{grid-template-columns:1fr}}.close{float:right;border:0;background:#ffffff22;color:white;border-radius:10px;padding:7px 10px;cursor:pointer}
 .note{font-size:12px;color:var(--muted);margin-top:12px}.footer{margin-top:34px;color:var(--muted);font-size:12px;text-align:center}
 @media(max-width:760px){.kpis{grid-template-columns:repeat(2,1fr)}.grid,.three{grid-template-columns:1fr}}
 @media print{.toolbar,.close{display:none}.card{break-inside:avoid}header{background:white;color:black}.kpis{margin-top:10px}}
@@ -49,14 +52,11 @@ dialog{width:min(860px,94vw);border:0;border-radius:20px;padding:0;box-shadow:0 
 </div>
 <div style="margin-top:18px" class="progress"><div class="bar" id="bar"></div></div>
 <div class="now" id="now"></div>
-<section class="chapter" id="instrumentos">
-  <h2>Instrumentos de evaluación</h2>
-  <p class="meta">Rúbricas oficiales de SmartTEAM por capítulo y rúbrica transversal de habilidades blandas y actitudes.</p>
-  <div class="grid" id="rubricCards"></div>
-</section>
+<section class="chapter" id="instrumentos"><h2>Instrumentos de evaluación</h2>
+<div class="grid" id="rubricCards"></div></section>
 <div class="toolbar">
 <button class="btn active" data-filter="all">Todas</button><button class="btn" data-filter="impartida">Impartidas</button><button class="btn" data-filter="actual">Actual</button><button class="btn" data-filter="pendiente">Pendientes</button>
-<button class="btn" onclick="window.print()">Imprimir / PDF</button>
+<button class="btn" onclick="window.print()">Imprimir / PDF</button><button class="btn" id="exportExec">Descargar seguimiento</button>
 </div>
 <div id="content"></div>
 <div class="footer">Planificación adaptada para encuentros de 90 minutos · Filosofía cristiana adventista integrada · Fuente académica base: SmartTEAM Libro 1.<br><strong>Cortesía de SolunieCloud Studio</strong></div>
@@ -65,38 +65,61 @@ dialog{width:min(860px,94vw);border:0;border-radius:20px;padding:0;box-shadow:0 
 <script src="data.js"></script>
 <script src="rubrics.js"></script>
 <script>
-const labels={impartida:"✓ Impartida",actual:"● Clase actual",pendiente:"○ Pendiente"};
+const labels={impartida:"✓ Impartida",actual:"● Clase actual",pendiente:"○ Pendiente",evaluada:"✓ Evaluada",cerrada:"✓ Cerrada"};
+function k(id,f){return `robotica1-${id}-${f}`}
+function state(x){return localStorage.getItem(k(x.id,"status"))||x.status}
+function ev(x,f){return localStorage.getItem(k(x.id,f))||((x.execution&&x.execution[f])||"")}
 let filter="all";
 function esc(s){return (s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
 function stats(){
- const d=CLASSES.filter(x=>x.status==="impartida").length, a=CLASSES.filter(x=>x.status==="actual").length,p=CLASSES.filter(x=>x.status==="pendiente").length;
+ const d=CLASSES.filter(x=>state(x)==="impartida").length, a=CLASSES.filter(x=>state(x)==="actual").length,p=CLASSES.filter(x=>state(x)==="pendiente").length;
  total.textContent=CLASSES.length;done.textContent=d;current.textContent=a;pending.textContent=p;pct.textContent=Math.round(d/CLASSES.length*100)+"%";bar.style.width=(d/CLASSES.length*100)+"%";
- const c=CLASSES.find(x=>x.status==="actual"); now.innerHTML=c?`<strong>¿Dónde estamos?</strong> Clase ${c.id} · ${esc(c.chapterName)} · ${esc(c.topic)}. <span class="meta">Las clases anteriores figuran como impartidas y las siguientes como pendientes.</span>`:"No hay una clase marcada como actual.";
+ const c=CLASSES.find(x=>state(x)==="actual"); now.innerHTML=c?`<strong>¿Dónde estamos?</strong> Clase ${c.id} · ${esc(c.chapterName)} · ${esc(c.topic)}. <span class="meta">Las clases anteriores figuran como impartidas y las siguientes como pendientes.</span>`:"No hay una clase marcada como actual.";
 }
 function render(){
  let html="";
  for(let ch=1;ch<=5;ch++){
-   const all=CLASSES.filter(x=>x.chapter===ch), arr=all.filter(x=>filter==="all"||x.status===filter); if(!arr.length) continue;
+   const all=CLASSES.filter(x=>x.chapter===ch), arr=all.filter(x=>filter==="all"||state(x)===filter); if(!arr.length) continue;
    html+=`<section class="chapter"><h2>Capítulo ${ch} · ${esc(all[0].chapterName)}</h2><div class="grid">`;
-   for(const x of arr) html+=`<article class="card" onclick="openClass(${x.id})"><div class="top"><span class="num">CLASE ${x.id} · SEMANA ${x.week}</span><span class="badge ${x.status}">${labels[x.status]}</span></div><h3>${esc(x.topic)}</h3><div class="meta">90 min · Filosofía + planificación + ejecución</div></article>`;
+   for(const x of arr) html+=`<article class="card" onclick="openClass(${x.id})"><div class="top"><span class="num">CLASE ${x.id} · SEMANA ${x.week}</span><span class="badge ${state(x)}">${labels[state(x)]||state(x)}</span></div><h3>${esc(x.topic)}</h3><div class="meta">90 min · Filosofía + planificación + ejecución</div></article>`;
    html+="</div></section>";
  }
  content.innerHTML=html;
 }
 function openClass(id){
  const x=CLASSES.find(v=>v.id===id);
- mh.innerHTML=`<div class="eyebrow">Clase ${x.id} · Capítulo ${x.chapter}</div><h2 style="margin:5px 0">${esc(x.topic)}</h2><span class="badge ${x.status}">${labels[x.status]}</span>`;
+ mh.innerHTML=`<div class="eyebrow">Clase ${x.id} · Capítulo ${x.chapter}</div><h2 style="margin:5px 0">${esc(x.topic)}</h2><span class="badge ${state(x)}">${labels[state(x)]||state(x)}</span>`;
  mb.innerHTML=`
  <div class="section"><h4>Filosofía cristiana adventista</h4><p>${esc(x.philosophy)}</p><p><strong>${esc(x.verse)}</strong></p></div>
  <div class="section"><h4>Propósito y contenido SmartTEAM</h4><p>${esc(x.objective)}</p></div>
  <div class="section"><h4>Secuencia didáctica · 90 minutos</h4><div class="three"><div class="mini"><b>Inicio</b><p>${esc(x.sequence.inicio)}</p></div><div class="mini"><b>Desarrollo</b><p>${esc(x.sequence.desarrollo)}</p></div><div class="mini"><b>Cierre</b><p>${esc(x.sequence.cierre)}</p></div></div></div>
  <div class="section"><h4>Recursos y organización</h4><p><b>Recursos:</b> ${esc(x.resources)}</p><p><b>Organización:</b> ${esc(x.grouping)}</p></div>
- <div class="section"><h4>Evidencia e instrumento</h4><p><b>Evidencia:</b> ${esc(x.evidence)}</p><p><b>Instrumento asociado:</b> Rúbrica oficial SmartTEAM del Capítulo ${x.chapter}.</p><button class="btn" onclick="openRubric(${x.chapter})">Ver rúbrica del capítulo</button><button class="btn" onclick="openSoft()">Habilidades blandas y actitudes</button></div>
- <div class="section"><h4>Registro de ejecución</h4><div class="exec"><p><b>Fecha impartida:</b> ${esc(x.execution.date)||"Por registrar"}</p><p><b>Contenido realmente alcanzado:</b> ${esc(x.execution.completed)||"Por registrar"}</p><p><b>Pendiente para próximo encuentro:</b> ${esc(x.execution.pending)||"Por registrar"}</p><p><b>Observaciones:</b> ${esc(x.execution.notes)||"Por registrar"}</p></div><div class="note">Este bloque se actualiza en <code>data.js</code> y, al publicar el cambio en GitHub, usted y Coordinación verán exactamente la misma versión.</div></div>`;
+ <div class="section"><h4>Evidencia e instrumento</h4><p><b>Evidencia:</b> ${esc(x.evidence)}</p><p><b>Instrumento:</b> ${esc(x.instrument)}</p></div>
+ <div class="section"><h4>Registro de ejecución interactivo</h4><div class="exec">
+<div class="exec-grid">
+<label>Estado<select id="exStatus"><option value="pendiente">Pendiente</option><option value="actual">Clase actual</option><option value="impartida">Impartida</option><option value="evaluada">Evaluada</option><option value="cerrada">Cerrada</option></select></label>
+<label>Fecha impartida<input id="exDate" type="date" value="${esc(ev(x,"date"))}"></label>
+</div>
+<label>Contenido realmente alcanzado<textarea id="exCompleted">${esc(ev(x,"completed"))}</textarea></label>
+<label>Pendiente para próximo encuentro<textarea id="exPending">${esc(ev(x,"pending"))}</textarea></label>
+<label>Observaciones<textarea id="exNotes">${esc(ev(x,"notes"))}</textarea></label>
+<p class="note">Los cambios se guardan automáticamente en este navegador. No necesita modificar <code>data.js</code> para su seguimiento personal.</p>
+</div></div>`;
  dlg.showModal();
 }
 document.querySelectorAll(".btn[data-filter]").forEach(b=>b.onclick=()=>{document.querySelectorAll(".btn[data-filter]").forEach(x=>x.classList.remove("active"));b.classList.add("active");filter=b.dataset.filter;render()});
 stats();render();
+
+
+document.getElementById("exportExec").onclick=()=>{
+ let rows=["Clase,Capítulo,Tema,Estado,Fecha,Contenido alcanzado,Pendiente,Observaciones"];
+ CLASSES.forEach(x=>{
+  const vals=[x.id,x.chapter,x.topic,state(x),ev(x,"date"),ev(x,"completed"),ev(x,"pending"),ev(x,"notes")].map(v=>`"${String(v||"").replaceAll('"','""')}"`);
+  rows.push(vals.join(","));
+ });
+ const blob=new Blob(["\ufeff"+rows.join("\n")],{type:"text/csv;charset=utf-8"});
+ const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="seguimiento_robotica_1ro_primaria.csv";a.click();URL.revokeObjectURL(a.href);
+};
 
 function rubricCardsRender(){
  let h="";
