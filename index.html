@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Robótica 1.º Primaria · Seguimiento 2026–2027</title>
+<style>
+:root{--navy:#10233f;--gold:#d4a72c;--bg:#f5f7fb;--card:#fff;--text:#18243a;--muted:#667085;--green:#16794b;--amber:#a15c00;--gray:#667085;--line:#e4e7ec}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
+header{background:linear-gradient(135deg,#10233f,#1e3a63);color:white;padding:28px 20px}.wrap{max-width:1180px;margin:auto}
+.brandhead{display:flex;align-items:center;gap:20px}.school-logo{width:112px;height:112px;object-fit:contain;background:white;border-radius:50%;padding:5px;box-shadow:0 6px 18px #0002}@media(max-width:620px){.brandhead{align-items:flex-start}.school-logo{width:78px;height:78px}}
+.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#f1d785;font-weight:800}.title{font-size:clamp(25px,4vw,42px);margin:6px 0}.sub{opacity:.88}
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:-18px}.kpi{background:white;border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 8px 24px #10233f12}.kpi b{display:block;font-size:26px}.kpi span{font-size:12px;color:var(--muted)}
+main{padding:28px 20px 50px}.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:18px 0}.btn{border:1px solid var(--line);background:#fff;padding:9px 13px;border-radius:999px;cursor:pointer;font-weight:700}.btn.active{background:var(--navy);color:#fff}
+.progress{height:10px;background:#e9edf4;border-radius:999px;overflow:hidden}.bar{height:100%;background:var(--gold)}
+.now{background:#fff8e8;border:1px solid #ecd28a;border-radius:16px;padding:16px;margin:18px 0}.now strong{color:#7a4c00}
+.chapter{margin-top:30px}.chapter h2{font-size:20px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:17px;cursor:pointer;transition:.15s}.card:hover{transform:translateY(-1px);box-shadow:0 10px 24px #10233f12}
+.top{display:flex;justify-content:space-between;gap:10px}.num{font-size:12px;font-weight:800;color:var(--muted)}.badge{font-size:11px;font-weight:800;border-radius:999px;padding:5px 9px}
+.impartida{background:#e8f7ef;color:var(--green)}.actual{background:#fff2d6;color:var(--amber)}.pendiente{background:#eef1f5;color:var(--gray)}
+.card h3{margin:8px 0 5px;font-size:17px}.meta{font-size:12px;color:var(--muted)}
+dialog{width:min(860px,94vw);border:0;border-radius:20px;padding:0;box-shadow:0 30px 80px #0004}dialog::backdrop{background:#08142699}
+.modal-head{background:var(--navy);color:white;padding:20px}.modal-body{padding:20px}.section{border-top:1px solid var(--line);padding:15px 0}.section:first-child{border-top:0}.section h4{margin:0 0 7px;color:var(--navy)}.three{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.mini{background:#f7f8fb;border-radius:12px;padding:12px}
+.exec{background:#f8fafc;border:1px dashed #b9c2cf;border-radius:14px;padding:14px}
+.exec-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.exec label{font-size:12px;font-weight:800;color:var(--navy)}
+.exec select,.exec input,.exec textarea{width:100%;margin-top:5px;padding:9px;border:1px solid var(--line);border-radius:9px;background:#fff;font:inherit}.exec textarea{min-height:72px;resize:vertical}
+@media(max-width:620px){.exec-grid{grid-template-columns:1fr}}.close{float:right;border:0;background:#ffffff22;color:white;border-radius:10px;padding:7px 10px;cursor:pointer}
+.note{font-size:12px;color:var(--muted);margin-top:12px}.footer{margin-top:34px;color:var(--muted);font-size:12px;text-align:center}
+@media(max-width:760px){.kpis{grid-template-columns:repeat(2,1fr)}.grid,.three{grid-template-columns:1fr}}
+@media print{.toolbar,.close{display:none}.card{break-inside:avoid}header{background:white;color:black}.kpis{margin-top:10px}}
+.rubric-table{width:100%;border-collapse:collapse;font-size:12px}.rubric-table th,.rubric-table td{border:1px solid var(--line);padding:9px;vertical-align:top}.rubric-table th{background:#eef3f8}.rubric-actions{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+@media print{dialog[open]{position:static;width:100%;box-shadow:none}.modal-head{background:white;color:black}.rubric-table{font-size:10px}}
+
+/* Rediseño Tecnología Creativa · conserva la lógica original */
+:root{--navy:#5737ae;--gold:#ffb22e;--bg:#f6f3ff;--card:#fff;--text:#263052;--muted:#65718a;--green:#128766;--amber:#a85a08;--gray:#6e7691;--line:#e7e1f4}
+body{background:radial-gradient(circle at 8% 18%,#e4f8ff 0,transparent 27%),radial-gradient(circle at 95% 30%,#fff0e0 0,transparent 28%),#f6f3ff}
+header{background:linear-gradient(125deg,#4d36ad 0%,#7355d9 43%,#238dc5 100%);position:relative;overflow:hidden;border-bottom:7px solid #ffc94e}
+header:before{content:'✦';position:absolute;right:7%;top:-65px;font-size:230px;color:#ffffff13;transform:rotate(-17deg);pointer-events:none}
+header:after{content:'●  ✧  ●  ✦';position:absolute;right:9%;bottom:18px;letter-spacing:18px;color:#ffffff66;font-size:24px;pointer-events:none}
+.brandhead{position:relative;z-index:1}.school-logo{border:4px solid #fff;box-shadow:0 10px 30px #20145e55}.eyebrow{color:#fff2aa}.title{font-weight:900;letter-spacing:-.025em;text-shadow:0 3px 12px #35208044}.sub{color:#f1f8ff;opacity:1}
+.kpis{position:relative;z-index:2}.kpi{border:1px solid #eae5f7;border-radius:20px;box-shadow:0 8px 25px #5440b118;border-top:5px solid #7554d9}.kpi:nth-child(2){border-top-color:#24b8aa}.kpi:nth-child(3){border-top-color:#ffad36}.kpi:nth-child(4){border-top-color:#ef81b1}.kpi:nth-child(5){border-top-color:#318cdb}.kpi b{color:#5636aa;font-weight:900;font-size:30px}.kpi:nth-child(2) b{color:#078f7e}.kpi:nth-child(3) b{color:#bd740a}.kpi:nth-child(4) b{color:#c54e87}.kpi:nth-child(5) b{color:#257fca}
+.progress{height:14px;background:#e6e0f6;border:2px solid white;box-shadow:0 3px 12px #6345c41c}.bar{background:linear-gradient(90deg,#7055df,#24c5b7,#ffc247);transition:width .25s}
+.now{background:linear-gradient(100deg,#fff4d7,#fff9eb);border:1px solid #f5d589;border-left:6px solid #f4aa26;box-shadow:0 6px 16px #bd8b2310}.now strong{color:#8c5b0b}
+.chapter h2{display:inline-block;color:#4e38a2;background:linear-gradient(90deg,#eee8ff,#e9f9ff);padding:12px 18px;border-radius:16px;border-left:6px solid #7455d8;font-weight:850}
+.chapter:nth-of-type(5n+2) h2{border-left-color:#23b9aa;background:linear-gradient(90deg,#e4fbf6,#eaf8ff)}.chapter:nth-of-type(5n+3) h2{border-left-color:#ffae32;background:linear-gradient(90deg,#fff4df,#fff8ee)}.chapter:nth-of-type(5n+4) h2{border-left-color:#ed7fb0;background:linear-gradient(90deg,#fff0f7,#f6edff)}
+.card{border:1px solid #e9e3f6;border-left:6px solid #7656d8;border-radius:19px;box-shadow:0 5px 17px #6049a70d;background:linear-gradient(145deg,#fff 75%,#f6f0ff);transition:transform .17s,box-shadow .17s}
+.card:nth-child(4n+2){border-left-color:#20b5a9;background:linear-gradient(145deg,#fff 75%,#eafbf7)}.card:nth-child(4n+3){border-left-color:#ffb444;background:linear-gradient(145deg,#fff 75%,#fff8e9)}.card:nth-child(4n+4){border-left-color:#e77cb1;background:linear-gradient(145deg,#fff 75%,#fff0f7)}
+.card:hover{transform:translateY(-4px);box-shadow:0 15px 34px #6547b52a}.card h3{color:#352b6b}.num{color:#7154c3}.badge{font-size:11px;padding:6px 10px}.impartida,.evaluada,.cerrada{background:#dcf7ec;color:#087b59}.actual{background:#fff0cf;color:#a56500}.pendiente{background:#eeeafa;color:#65588d}
+.btn{border:1px solid #e4d9f6;box-shadow:0 3px 9px #5d42ac10}.btn:hover{background:#f0eaff}.btn.active{background:linear-gradient(100deg,#6545ca,#327fcb);border-color:transparent;color:#fff}
+dialog{border:2px solid #eee7ff;border-radius:24px}.modal-head{background:linear-gradient(115deg,#5938b6,#268ec7)}.section h4{color:#6541b9}.mini{background:#f0f7ff;border:1px solid #e1edff}.mini:nth-child(2){background:#effcf8;border-color:#d8f5ed}.mini:nth-child(3){background:#fff6e7;border-color:#ffeac6}.exec{background:#f8f5ff;border:1px dashed #aa91e9}.exec label{color:#5638a8}.rubric-table th{background:#ede8ff;color:#493499}.rubric-table tr:nth-child(even) td{background:#faf8ff}
+.footer{padding:18px;background:#fff;border:1px solid #ece5f9;border-radius:18px}
+@media print{body{background:white}.card{box-shadow:none}header{background:white;color:black;border-bottom:2px solid #ddd}.eyebrow,.sub{color:#444}.kpi{box-shadow:none}}
+
+</style>
+</head>
+<body>
+<header><div class="wrap">
+<div class="brandhead">
+<img class="school-logo" src="logo-cajpd.png" alt="Logo del Colegio Adventista Juan Pablo Duarte">
+<div>
+<div class="eyebrow">Colegio Adventista Juan Pablo Duarte · Tecnología e Innovación</div>
+<div class="title">Robótica · 1.º de Primaria</div>
+<div class="sub">SmartTEAM Libro 1 · Año escolar 2026–2027 · 1 encuentro semanal de 90 minutos</div>
+</div>
+</div>
+</div></header>
+<main class="wrap">
+<div class="kpis">
+<div class="kpi"><b id="total">35</b><span>Clases planificadas</span></div>
+<div class="kpi"><b id="done">3</b><span>Impartidas</span></div>
+<div class="kpi"><b id="current">1</b><span>Clase actual</span></div>
+<div class="kpi"><b id="pending">31</b><span>Pendientes</span></div>
+<div class="kpi"><b id="pct">9%</b><span>Avance impartido</span></div>
+</div>
+<div style="margin-top:18px" class="progress"><div class="bar" id="bar"></div></div>
+<div class="now" id="now"></div>
+<section class="chapter" id="instrumentos"><h2>Instrumentos de evaluación</h2>
+<div class="grid" id="rubricCards"></div></section>
+<div class="toolbar">
+<button class="btn active" data-filter="all">Todas</button><button class="btn" data-filter="impartida">Impartidas</button><button class="btn" data-filter="actual">Actual</button><button class="btn" data-filter="pendiente">Pendientes</button>
+<button class="btn" onclick="window.print()">Imprimir / PDF</button><button class="btn" id="exportExec">Descargar seguimiento</button>
+</div>
+<div id="content"></div>
+<div class="footer">Planificación adaptada para encuentros de 90 minutos · Filosofía cristiana adventista integrada · Fuente académica base: SmartTEAM Libro 1.<br><strong>Cortesía de SolunieCloud Studio</strong></div>
+</main>
+<dialog id="dlg"><div class="modal-head"><button class="close" onclick="dlg.close()">Cerrar</button><div id="mh"></div></div><div class="modal-body" id="mb"></div></dialog>
+<script src="data.js"></script>
+<script src="rubrics.js"></script>
+<script>
+const labels={impartida:"✓ Impartida",actual:"● Clase actual",pendiente:"○ Pendiente",evaluada:"✓ Evaluada",cerrada:"✓ Cerrada"};
+function k(id,f){return `robotica1-${id}-${f}`}
+function state(x){return localStorage.getItem(k(x.id,"status"))||x.status}
+function ev(x,f){return localStorage.getItem(k(x.id,f))||((x.execution&&x.execution[f])||"")}
+let filter="all";
+function esc(s){return (s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+function stats(){
+ const d=CLASSES.filter(x=>["impartida","evaluada","cerrada"].includes(state(x))).length, a=CLASSES.filter(x=>state(x)==="actual").length,p=CLASSES.filter(x=>state(x)==="pendiente").length;
+ total.textContent=CLASSES.length;done.textContent=d;current.textContent=a;pending.textContent=p;pct.textContent=Math.round(d/CLASSES.length*100)+"%";bar.style.width=(d/CLASSES.length*100)+"%";
+ const c=CLASSES.find(x=>state(x)==="actual"); now.innerHTML=c?`<strong>¿Dónde estamos?</strong> Clase ${c.id} · ${esc(c.chapterName)} · ${esc(c.topic)}. <span class="meta">Las clases anteriores figuran como impartidas y las siguientes como pendientes.</span>`:"No hay una clase marcada como actual.";
+}
+function render(){
+ let html="";
+ for(let ch=1;ch<=5;ch++){
+   const all=CLASSES.filter(x=>x.chapter===ch), arr=all.filter(x=>filter==="all"||state(x)===filter); if(!arr.length) continue;
+   html+=`<section class="chapter"><h2>Capítulo ${ch} · ${esc(all[0].chapterName)}</h2><div class="grid">`;
+   for(const x of arr) html+=`<article class="card" onclick="openClass(${x.id})"><div class="top"><span class="num">CLASE ${x.id} · SEMANA ${x.week}</span><span class="badge ${state(x)}">${labels[state(x)]||state(x)}</span></div><h3>${esc(x.topic)}</h3><div class="meta">90 min · Filosofía + planificación + ejecución</div></article>`;
+   html+="</div></section>";
+ }
+ content.innerHTML=html;
+}
+function openClass(id){
+ const x=CLASSES.find(v=>v.id===id);
+ mh.innerHTML=`<div class="eyebrow">Clase ${x.id} · Capítulo ${x.chapter}</div><h2 style="margin:5px 0">${esc(x.topic)}</h2><span class="badge ${state(x)}">${labels[state(x)]||state(x)}</span>`;
+ mb.innerHTML=`
+ <div class="section"><h4>Filosofía cristiana adventista</h4><p>${esc(x.philosophy)}</p><p><strong>${esc(x.verse)}</strong></p></div>
+ <div class="section"><h4>Propósito y contenido SmartTEAM</h4><p>${esc(x.objective)}</p></div>
+ <div class="section"><h4>Secuencia didáctica · 90 minutos</h4><div class="three"><div class="mini"><b>Inicio</b><p>${esc(x.sequence.inicio)}</p></div><div class="mini"><b>Desarrollo</b><p>${esc(x.sequence.desarrollo)}</p></div><div class="mini"><b>Cierre</b><p>${esc(x.sequence.cierre)}</p></div></div></div>
+ <div class="section"><h4>Recursos y organización</h4><p><b>Recursos:</b> ${esc(x.resources)}</p><p><b>Organización:</b> ${esc(x.grouping)}</p></div>
+ <div class="section"><h4>Evidencia e instrumento</h4><p><b>Evidencia:</b> ${esc(x.evidence)}</p><p><b>Instrumento:</b> ${esc(x.instrument)}</p></div>
+ <div class="section"><h4>Registro de ejecución interactivo</h4><div class="exec">
+<div class="exec-grid">
+<label>Estado<select id="exStatus"><option value="pendiente">Pendiente</option><option value="actual">Clase actual</option><option value="impartida">Impartida</option><option value="evaluada">Evaluada</option><option value="cerrada">Cerrada</option></select></label>
+<label>Fecha impartida<input id="exDate" type="date" value="${esc(ev(x,"date"))}"></label>
+</div>
+<label>Contenido realmente alcanzado<textarea id="exCompleted">${esc(ev(x,"completed"))}</textarea></label>
+<label>Pendiente para próximo encuentro<textarea id="exPending">${esc(ev(x,"pending"))}</textarea></label>
+<label>Observaciones<textarea id="exNotes">${esc(ev(x,"notes"))}</textarea></label>
+<p class="note">Los cambios se guardan automáticamente en este navegador. No necesita modificar <code>data.js</code> para su seguimiento personal.</p>
+</div></div>`;
+ const s=document.getElementById("exStatus");
+ if(s){
+   s.value=state(x);
+   s.addEventListener("change",()=>{
+     localStorage.setItem(k(x.id,"status"),s.value);
+     const badge=mh.querySelector(".badge");
+     if(badge){badge.className="badge "+s.value;badge.textContent=labels[s.value]||s.value;}
+     stats();render();
+   });
+   [["exDate","date"],["exCompleted","completed"],["exPending","pending"],["exNotes","notes"]].forEach(([eid,field])=>{
+     const el=document.getElementById(eid);
+     if(el){
+       const save=()=>localStorage.setItem(k(x.id,field),el.value);
+       el.addEventListener("input",save);el.addEventListener("change",save);
+     }
+   });
+ }
+ dlg.showModal();
+}
+document.querySelectorAll(".btn[data-filter]").forEach(b=>b.onclick=()=>{document.querySelectorAll(".btn[data-filter]").forEach(x=>x.classList.remove("active"));b.classList.add("active");filter=b.dataset.filter;render()});
+stats();render();
+
+
+document.getElementById("exportExec").onclick=()=>{
+ let rows=["Clase,Capítulo,Tema,Estado,Fecha,Contenido alcanzado,Pendiente,Observaciones"];
+ CLASSES.forEach(x=>{
+  const vals=[x.id,x.chapter,x.topic,state(x),ev(x,"date"),ev(x,"completed"),ev(x,"pending"),ev(x,"notes")].map(v=>`"${String(v||"").replaceAll('"','""')}"`);
+  rows.push(vals.join(","));
+ });
+ const blob=new Blob(["\ufeff"+rows.join("\n")],{type:"text/csv;charset=utf-8"});
+ const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="seguimiento_robotica_1ro_primaria.csv";a.click();URL.revokeObjectURL(a.href);
+};
+
+function rubricCardsRender(){
+ let h="";
+ for(let i=1;i<=5;i++){let r=RUBRICS[i];h+=`<article class="card" onclick="openRubric(${i})"><div class="top"><span class="num">RÚBRICA OFICIAL · CAPÍTULO ${i}</span></div><h3>${esc(r.title)}</h3><div class="meta">Robótica · Programación · Pensamiento computacional · Ver / imprimir</div></article>`}
+ h+=`<article class="card" onclick="openSoft()"><div class="top"><span class="num">RÚBRICA TRANSVERSAL</span></div><h3>Habilidades blandas y actitudes</h3><div class="meta">Desempeño personal y grupal · Ver / imprimir</div></article>`;
+ rubricCards.innerHTML=h;
+}
+function openRubric(ch){
+ const r=RUBRICS[ch]; mh.innerHTML=`<div class="eyebrow">Instrumento oficial · Libro 1 · Capítulo ${ch}</div><h2 style="margin:5px 0">${esc(r.title)}</h2>`;
+ let rows=r.rows.map(x=>`<tr>${x.map(v=>`<td>${esc(v)}</td>`).join("")}</tr>`).join("");
+ mb.innerHTML=`<div class="rubric-actions"><button class="btn" onclick="window.print()">Imprimir rúbrica</button></div><table class="rubric-table"><thead><tr><th>Área</th><th>Criterio</th><th>Aún no adquirido</th><th>Parcialmente adquirido</th><th>Totalmente adquirido</th></tr></thead><tbody>${rows}</tbody></table><p class="note">Rúbrica orientadora del proceso de enseñanza-aprendizaje. Se conserva la escala propuesta por SmartTEAM.</p>`;
+ dlg.showModal();
+}
+function openSoft(){
+ mh.innerHTML=`<div class="eyebrow">Instrumento transversal</div><h2 style="margin:5px 0">Habilidades blandas y actitudes</h2>`;
+ let p=SOFT_RUBRIC.personal.map(v=>`<tr><td>Desempeño personal</td><td>${esc(v)}</td><td></td><td></td><td></td></tr>`).join("");
+ let g=SOFT_RUBRIC.group.map(v=>`<tr><td>Desempeño grupal</td><td>${esc(v)}</td><td></td><td></td><td></td></tr>`).join("");
+ mb.innerHTML=`<div class="rubric-actions"><button class="btn" onclick="window.print()">Imprimir rúbrica</button></div><table class="rubric-table"><thead><tr><th>Área</th><th>Criterio</th><th>Muy pocas veces</th><th>Algunas veces</th><th>La mayoría de las veces</th></tr></thead><tbody>${p}${g}</tbody></table>`;
+ dlg.showModal();
+}
+rubricCardsRender();
+
+</script>
+</body></html>
